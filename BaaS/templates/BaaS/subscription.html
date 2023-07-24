@@ -1,0 +1,94 @@
+{% extends "BaaS/base.html" %}
+{% block hero %}
+<div class="px-4 py-5 text-center bg-custom-green text-custom-white">
+    <h1 class="display-5 fw-bold">Your subscription</h1>
+</div>
+{% endblock hero %}
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col pt-3">
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link text-custom-green" href="{% url 'baas-profile' pk=user.pk %}">Profile</a>
+                  </li>
+                  <li class="nav-item">
+                    <p class="nav-link text-custom-green">></p>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link text-muted active" aria-current="page" href="#">Subscription</a>
+                </li>
+              </ul>
+        </div>
+    </div>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="row text-custom-green pb-4">
+            <div class="col-md-4 text-md-end pt-md-5">
+                <p class="fs-4">Subscription Type</p> 
+            </div>
+            <div class="col-md-8">
+        <div class="row row-cols-1 row-cols-md-3 py-4">
+            {% for subscription in subscriptions %}
+            <div class="col">
+                <label class="w-100">
+                    <input type="radio" name="subscriptiontype" {% if request.user.subscription.subscriptiontype.pk == subscription.pk %} selected checked {% endif %}  class="card-input-element" value="{{subscription.pk}}">
+                    <div class="card border-custom-green mb-3 h-100 card-input">
+
+                        <div class="card-body text-custom-green">
+                            <h5 class="card-title">{{subscription.title}}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">NOK {{subscription.price}}</h6>
+                        </div>
+                    </div>
+                </label>
+            </div>
+            {% endfor %}
+
+        </div>
+            </div>
+        </div>
+
+        <div class="row text-custom-green pb-4">
+            <div class="col-md-4 text-md-end">
+                <p class="fs-4">Payment Info</p> 
+            </div>
+            <div class="col-md-4">
+                <select type="text" class="form-select form-custom-input" name="{{form.payment.html_name}}" required>
+                {% for card in paymentinfo %}
+                <option value="{{card.pk}}" {% if card.pk == request.user.subscription.payment.pk %} selected {% endif %} >{{card.fourdigits}}</option>
+                {% empty %}
+                <option value="">No cards found</option>
+                {% endfor %}
+                </select>
+                <small class="text-muted text-custom-error d-block">{{form.payment.errors}}</small>
+                <small class="text-muted">{{form.payment.help_text}}</small>
+            </div>
+            <div class="col-md-4">
+                <a href="{% url 'baas-payment' %}" class="btn btn-custom-white rounded-pill">Add a new card</a>
+            </div>
+        </div>
+
+        <div class="row text-custom-green pb-4">
+            <div class="col-md-8 offset-md-4">
+                <div class="form-check ms-2">
+                    <input class="form-check-input fs-4" type="checkbox" name="{{form.auto_renewal.html_name}}" id="auto_renew" {% if request.user.subscription.auto_renewal %} checked {% endif %}>
+                    <label class="form-check-label fs-4" for="auto_renew">
+                      Automatically renew my subscription
+                    </label>
+                  </div>
+            </div>
+        </div>
+        <div class="row text-custom-green pb-4">
+            <div class="col-md-4 offset-md-4">
+                <small class="text-muted text-custom-error d-block">{{ form.non_field_errors }}</small>
+                
+                <button type="submit" class="btn btn-lg btn-custom-green rounded-pill me-2">Update</button>
+                <a href="{% url 'baas-profile' pk=user.pk %}" class="btn btn-lg btn-outline-secondary rounded-pill me-2">Cancel</a>
+
+                <small class="text-muted d-block pt-2">*If you change subscription type, you will be refunded half of the remaining days of your current subscription.</small> 
+            </div>
+        </div>
+
+    </form>
+</div>
+{% endblock body %}

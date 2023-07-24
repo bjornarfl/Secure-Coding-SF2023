@@ -1,0 +1,80 @@
+{% extends "BaaS/base.html" %}
+{% block hero %}
+<div class="px-4 py-5 mb-5 text-center bg-custom-green text-custom-white">
+    <h1 class="display-5 fw-bold">Register</h1>
+    <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4"><i>Already have an account? </i> <a href="{% url 'login' %}" class="ms-2 btn btn-sm btn-outline-custom rounded-pill">Sign In</a></p>
+    </div>
+  </div>
+{% endblock hero %}
+{% block body %}
+  <div class="container">
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="row text-custom-green pb-4">
+            <div class="col-md-4 text-md-end">
+                <p class="fs-4">Email</p> 
+            </div>
+            <div class="col-md-4">
+                <input type="email" class="form-control form-custom-input" name="{{form.email.html_name}}" {% if form.email.value %} value="{{form.email.value}}"{% endif %} required>
+                <small class="text-muted text-custom-error d-block">{{form.email.errors}}</small>
+                <small class="text-muted">{{form.email.help_text}}</small>
+            </div>
+        </div>
+
+        <div class="row text-custom-green pb-4">
+            <div class="col-md-4 text-md-end">
+                <p class="fs-4">First Name</p> 
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control form-custom-input" name="{{form.first_name.html_name}}" {% if form.first_name.value %} value="{{form.first_name.value}}"{% endif %} required>
+                <small class="text-muted text-custom-error d-block">{{form.first_name.errors}}</small>
+                <small class="text-muted">{{form.first_name.help_text}}</small>
+            </div>
+        </div>
+
+        <div class="row text-custom-green pb-4">
+            <div class="col-md-4 text-md-end">
+                <p class="fs-4">Last Name</p> 
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control form-custom-input" name="{{form.last_name.html_name}}" {% if form.last_name.value %} value="{{form.last_name.value}}"{% endif %} required>
+                <small class="text-muted text-custom-error d-block">{{form.last_name.errors}}</small>
+                <small class="text-muted">{{form.last_name.help_text}}</small>
+            </div>
+        </div>
+
+        <div class="row text-custom-green pb-4">
+            <div class="col-md-4 text-md-end">
+                <p class="fs-4">Password</p> 
+            </div>
+            <div class="col-md-4">
+                <input type="password" class="form-control form-custom-input" name="{{form.password1.html_name}}" required>
+                <small class="text-muted text-custom-error d-block">{{form.password.errors}}</small>
+                <small class="text-muted">{{form.password1.help_text}}</small>
+            </div>
+        </div>
+
+        <div class="row text-custom-green pb-4">
+            <div class="col-md-4 text-md-end">
+                <p class="fs-4">Repeat Password</p> 
+            </div>
+            <div class="col-md-4">
+                <input type="password" class="form-control form-custom-input" name="{{form.password2.html_name}}" required>
+                <small class="text-muted text-custom-error d-block">{{form.password2.errors}}</small>
+                <small class="text-muted">{{form.password2.help_text}}</small>
+            </div>
+        </div>
+        <div class="row text-custom-green pb-4">
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-4">
+                {{form.errors}}
+                <small class="text-muted text-custom-error d-block">{{ form.non_field_errors }}</small>  
+                <button type="submit" class="btn btn-lg btn-custom-green rounded-pill">Sign Up</button>
+            </div>
+        </div>
+        
+    </form>
+  </div>
+{% endblock body %}

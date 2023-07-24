@@ -1,0 +1,141 @@
+{% extends "BaaS/base.html" %}
+{% block hero %}
+<div class="px-4 py-5 mb-5 text-center bg-custom-green text-custom-white">
+    <h1 class="display-5 fw-bold">{{user.first_name}} {{user.last_name}}</h1>
+    <div class="col-lg-6 mx-auto">
+        <p class="lead mb-2"><a href="{% url 'logout' %}" class="ms-2 btn btn-sm btn-outline-custom rounded-pill">Log
+                Out</a></p>
+    </div>
+</div>
+{% endblock hero %}
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <div class="row text-custom-green pb-4">
+                    <div class="col-md-6 text-md-end">
+                        <p class="fs-4">Email</p>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="email" class="form-control form-custom-input" name="{{u_form.email.html_name}}" {% if u_form.email.value %} value="{{u_form.email.value}}" {% endif %} required>
+                        <small class="text-muted text-custom-error d-block">{{u_form.email.errors}}</small>
+                        <small class="text-muted">{{u_form.email.help_text}}</small>
+                    </div>
+                </div>
+
+                <div class="row text-custom-green pb-4">
+                    <div class="col-md-6 text-md-end">
+                        <p class="fs-4">First Name</p>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control form-custom-input" name="{{u_form.first_name.html_name}}" {% if u_form.first_name.value %} value="{{u_form.first_name.value}}" {% endif %} required>
+                        <small class="text-muted text-custom-error d-block">{{u_form.first_name.errors}}</small>
+                        <small class="text-muted">{{u_form.first_name.help_text}}</small>
+                    </div>
+                </div>
+
+                <div class="row text-custom-green pb-4">
+                    <div class="col-md-6 text-md-end">
+                        <p class="fs-4">Last Name</p>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control form-custom-input" name="{{u_form.last_name.html_name}}" {% if u_form.last_name.value %} value="{{u_form.last_name.value}}" {% endif %} required>
+                        <small class="text-muted text-custom-error d-block">{{u_form.last_name.errors}}</small>
+                        <small class="text-muted">{{u_form.last_name.help_text}}</small>
+                    </div>
+                </div>
+
+                <div class="row text-custom-green pb-4">
+                    <div class="col-md-6 offset-md-6">
+                        <small class="text-muted text-custom-error d-block">{{ form.non_field_errors }}</small>
+                        <button type="submit" class="btn btn-lg btn-custom-green rounded-pill">Update</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-custom-green mb-3">
+                <div class="card-body text-custom-green">
+                    <h5 class="card-title">Your subscription:</h5>
+                    {% if user.subscription %}
+                    <h6 class="card-subtitle mb-2 text-muted">{{user.subscription.subscriptiontype.title}} - NOK {{user.subscription.subscriptiontype.price}}</h6>
+                    <p class="card-text">{{user.subscription.subscriptiontype.description}}</p>
+                        {% if user.subscription.is_valid and user.subscription.auto_renewal %}
+                        <p class="card-text">Automatically renews {{user.subscription.valid_until}} </p>
+                        <a href="{% url 'baas-subscription' %}" class="btn btn-sm btn-custom-white rounded-pill">Change subscription</a>
+                        {% elif user.subscription.is_valid%}
+                        <p class="card-text">Valid until {{user.subscription.valid_until}} </p>
+                        <a href="{% url 'baas-subscription' %}" class="btn btn-sm btn-custom-white rounded-pill">Change subscription</a>
+                        {% else %}
+                        <p class="card-text text-custom-error">*Subscription has expired</p>
+                        <a href="{% url 'baas-subscription' %}" class="btn btn-sm btn-custom-white rounded-pill">Renew subscription</a>
+                        {% endif %}
+                    {% else %}
+                    <h6 class="card-subtitle mb-2 text-muted">No active subscription</h6>
+                    <a href="{% url 'baas-subscription' %}" class="btn btn-sm btn-custom-white rounded-pill">Buy now</a>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="bg-custom-gray">
+    <div class="container">
+        <div class="row py-4">
+            <div class="col-md-4 text-md-end">
+                <p class="fs-4">Bike Rentals</p>
+                {% if request.GET.search %}
+                <p class="text-muted">Search results for "{{request.GET.search|safe}}"</p>
+                {% endif %}             
+                <form action="" method="GET">
+                <div class="input-group mb-3">
+                    <input class="form-control form-custom-input" list="datalistOptions" name="search" placeholder="Choose a station">
+                    <datalist id="datalistOptions">
+                        {% for station in stations %}
+                          <option value="{{station}}">
+                        {% endfor %}
+                    </datalist>
+                    <button class="btn btn-outline-secondary btn-custom-green" type="submit">Search</button>
+                </div>
+            </form>
+            </div>
+
+            <div class="col-md-8">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Time</th>
+                            <th scope="col">From</th>
+                            <th scope="col">To</th>
+                            <th scope="col">Duration</th>
+                            <th scope="col">Receipt</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for rental in rentals %}
+                        <tr>
+                            <th scope="row">{{rental.pk}}</th>
+                            <th>{{rental.start_time}}</th>
+                            <td>{{rental.start_station}}</td>
+                            <td>{{rental.end_station}}</td>
+                            <td>{{rental.duration}}</td>
+                            <td><a href="" class="text-custom-green">Open</a></td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">Could not find any Bike rentals</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}

@@ -1,0 +1,47 @@
+{% extends "BaaS/base.html" %}
+{% block hero %}
+<div class="px-4 py-5 mb-5 text-center bg-custom-green text-custom-white">
+    <h1 class="display-5 fw-bold">Log in</h1>
+    <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4"><i>Need an account? </i> <a href="{% url 'baas-register' %}" class="ms-2 btn btn-sm btn-outline-custom rounded-pill">Sign Up</a></p>
+    </div>
+  </div>
+{% endblock hero %}
+{% block body %}
+  <div class="container">
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="row text-custom-green pb-4">
+            <div class="col-md-4 text-md-end">
+                <p class="fs-4">Email</p> 
+            </div>
+            <div class="col-md-4">
+                <input type="email" class="form-control form-custom-input" name="username" {% if form.email.value %} value="{{form.email.value}}"{% endif %} required>
+                <small class="text-muted text-custom-error d-block">{{form.email.errors}}</small>
+                <small class="text-muted">{{form.email.help_text}}</small>
+            </div>
+        </div>
+
+        <div class="row text-custom-green pb-4">
+            <div class="col-md-4 text-md-end">
+                <p class="fs-4">Password</p> 
+            </div>
+            <div class="col-md-4">
+                <input type="password" class="form-control form-custom-input" name="{{form.password.html_name}}" required>
+                <small class="text-muted text-custom-error d-block">{{form.password.errors}}</small>
+                <small class="text-muted">{{form.password.help_text}}</small>
+            </div>
+        </div>
+
+        <div class="row text-custom-green pb-4">
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-4">
+                <small class="text-muted text-custom-error d-block">{{ form.non_field_errors }}</small>              
+                <button type="submit" class="btn btn-lg btn-custom-green rounded-pill">Log In</button>
+            </div>
+        </div>
+        
+    </form>
+  </div>
+{% endblock body %}
