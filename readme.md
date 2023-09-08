@@ -1,6 +1,6 @@
 # Secure Coding Practice
  A sample web application containing vulnerabilities from OWASP Top 10. All information in this repository is entirely fictional.
- During Sikkerhetsfestivalen 2023, the application can be accessed here: scat-sf23.eu-west-1.elasticbeanstalk.com (at least until someone eventually breaks it.)
+ During Security Champions Norge, the application can be accessed [here](http://secchampnorge.eu-west-1.elasticbeanstalk.com/) (at least until someone eventually breaks it.)
 
 ## The Case:
  Bikes as a Service* (BaaS) is a startup that offers easy-to-use bike rental across Oslo. Your task is to review the security of their Web Portal. Using your knowledge of OWASP Top 10, can you find any vulnerabilities?
